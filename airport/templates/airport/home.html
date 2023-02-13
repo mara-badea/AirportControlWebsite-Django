@@ -1,0 +1,30 @@
+{% extends "airport/base.html" %}
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Flight No.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Departure Time</th>
+        <th scope="col">Estimated Departure Time</th>
+      <th scope="col">Arrival Time</th>
+        <th scope="col">Estimated Arrival Time</th>
+        <th scope="col">Day of the week</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+   {% for class_schedule in schedule %}
+    <tr>
+      <td>{{ class_schedule.flight_number }}</td>
+      <td>{{ class_schedule.origin }}</td>
+      <td>{{ class_schedule.departure_time }}</td>
+        <td>{{ class_schedule.estimated_departure }}</td>
+        <td>{{ class_schedule.estimated_arrival }}</td>
+      <td>{{ class_schedule.arrival_time }}</td>
+      <td>{{ class_schedule.day}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends "airport/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+     <div class="content-section">
+      <h2 class="account-heading">{{ user.username }}</h2>
+      <p class="text-secondary">{{ user.email }}</p>
+         <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Departure Time</th>
+            <th scope="col">Arrival Time</th>
+            <th scope="col">Day of the week</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        {% for class_ticket in Ticket %}
+        <tr>
+            <td>{{ class_ticket.title }}</td>
+            <td>{{ class_ticket.departure_time }}</td>
+            <td>{{ class_ticket.arrival_time }}</td>
+            <td>{{ class_ticket.day }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    </div>
+
+  <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <fieldset class ="form-group">
+          <legend class = "bord-bottom mb-4">Profile Info</legend>
+          {{ u_form|crispy }}
+          {{ p_form|crispy }}
+      </fieldset>
+      <div class="form-group">
+      <button class="btn btn-outline-info" type="submit">Update</button>
+      </div>
+  </form>
+</div>
+{% endblock content %}
+
+
+
