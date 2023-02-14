@@ -56,21 +56,23 @@ def add_flight(request):
         return render(request, 'airport/addflights.html', {'form': form})
 
 @staff_member_required
-def edit_flights(request, flight_number):
-    schedule = Schedule.objects.get(flight_number=flight_number)
+def edit_flights(request, id):
+    schedule = Schedule.objects.get(id=id)
     if request.method == 'POST':
         # Get the flight instance based on the submitted data
         form = EditFlightForm(request.POST, instance=schedule)
         if form.is_valid():
             form.save()
-            return redirect('home', schedule.flight_number)
+            return redirect('home')
+
     else:
         form = EditFlightForm(instance=schedule)
-    return render(request, 'airport/editflights.html', {'form': form})
+        return render(request, 'airport/editflights.html', {'form' : form})
+    return render(request, 'airport/home.html', {'form': form})
 
 @staff_member_required
-def delete_flight(request, flight_number):
-    flight = Schedule.objects.get(flight_number=flight_number)
+def delete_flight(request, id):
+    flight = Schedule.objects.get(id=id)
     if request.method == 'POST':
         flight.delete()
         return redirect('home')
