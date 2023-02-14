@@ -44,6 +44,9 @@
           <a class="nav-item nav-link" href={% url 'login' %}>Login</a>
           <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
             {% endif %}
+          {% if user.is_staff %}
+              <a class="nav-item nav-link" href="{% url 'add-flights' %}">Add Flights</a>
+          {% endif %}
         </div>
         </ul>
       </div>

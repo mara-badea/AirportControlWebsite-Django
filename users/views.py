@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FlightForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FlightForm, EditFlightForm, TicketUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from .models import Ticket, Flight
+from airport.models import Schedule
 
 def register(request):
     if request.method == 'POST':
@@ -18,6 +20,7 @@ def register(request):
 
 @login_required
 def profile(request):
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST,
                                 instance = request.user)
@@ -32,9 +35,11 @@ def profile(request):
     else:
         u_form = UserUpdateForm(instance = request.user)
         p_form = ProfileUpdateForm(instance = request.user.profile)
+
         context = {
             'u_form': u_form,
             'p_form': p_form,
+
         }
         return render(request, 'users/profile.html', context)
 
@@ -45,7 +50,28 @@ def add_flight(request):
         if form.is_valid():
             flight = form.save(commit=False)
             flight.save()
-            return redirect('flight_list')
+            return redirect('home')
     else:
         form = FlightForm()
-    return render(request, 'admin/add_flight.html', {'form': form})
+        return render(request, 'airport/addflights.html', {'form': form})
+
+@staff_member_required
+def edit_flights(request, flight_number):
+    schedule = Schedule.objects.get(flight_number=flight_number)
+    if request.method == 'POST':
+        # Get the flight instance based on the submitted data
+        form = EditFlightForm(request.POST, instance=schedule)
+        if form.is_valid():
+            form.save()
+            return redirect('home', schedule.flight_number)
+    else:
+        form = EditFlightForm(instance=schedule)
+    return render(request, 'airport/editflights.html', {'form': form})
+
+@staff_member_required
+def delete_flight(request, flight_number):
+    flight = Schedule.objects.get(flight_number=flight_number)
+    if request.method == 'POST':
+        flight.delete()
+        return redirect('home')
+    return render(request, 'airport/deleteflight.html', {'flight': flight})

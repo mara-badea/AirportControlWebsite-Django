@@ -4,12 +4,18 @@
   <thead>
     <tr>
       <th scope="col">Flight No.</th>
-      <th scope="col">Name</th>
+      <th scope="col">Origin</th>
+        <th scope="col">Destination</th>
       <th scope="col">Departure Time</th>
         <th scope="col">Estimated Departure Time</th>
       <th scope="col">Arrival Time</th>
         <th scope="col">Estimated Arrival Time</th>
-        <th scope="col">Day of the week</th>
+        <th scope="col">Date</th>
+        <th scope="col">Status</th>
+        {% if user.is_staff %}
+        <th scope="col">Actions</th>
+        {% endif %}
+
     </tr>
   </thead>
   <tbody>
@@ -18,11 +24,19 @@
     <tr>
       <td>{{ class_schedule.flight_number }}</td>
       <td>{{ class_schedule.origin }}</td>
+        <td>{{ class_schedule.destination }}</td>
       <td>{{ class_schedule.departure_time }}</td>
         <td>{{ class_schedule.estimated_departure }}</td>
         <td>{{ class_schedule.estimated_arrival }}</td>
       <td>{{ class_schedule.arrival_time }}</td>
       <td>{{ class_schedule.day}}</td>
+        <td>{{ class_schedule.status}}</td>
+            {% if user.is_staff %}
+                <td>
+                    <a href="{% url 'edit-flights' class_schedule.flight_number %}" class="btn btn-outline-info btn-sm">Edit</a>
+                    <a href="{% url 'delete-flight' class_schedule.flight_number %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                </td>
+        {% endif %}
     </tr>
     {% endfor %}
   </tbody>

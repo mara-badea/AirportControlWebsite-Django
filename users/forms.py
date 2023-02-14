@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
+from .models import Profile, Flight, Ticket
 from airport.models import Schedule
 
 class UserRegisterForm(UserCreationForm):
@@ -25,7 +25,17 @@ class ProfileUpdateForm(forms.ModelForm):
 class FlightForm(forms.ModelForm):
     class Meta:
         model = Schedule
-        fields = ['flight_number', 'origin', 'departure_time', 'estimated_departure',
-                  'arrival_time', 'estimated_arrival', 'day']
+        fields = ['flight_number', 'origin', 'destination', 'departure_time', 'estimated_departure',
+                  'arrival_time', 'estimated_arrival', 'day', 'status']
 
+class EditFlightForm(forms.ModelForm):
+    class Meta:
+        model = Schedule
+        fields = ['flight_number', 'origin', 'destination', 'departure_time', 'estimated_departure',
+                  'arrival_time', 'estimated_arrival', 'day', 'status']
 
+class TicketUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ['flight_number', 'origin', 'destination', 'departure_date', 'departure_time',
+                  'arrival_date', 'arrival_time']

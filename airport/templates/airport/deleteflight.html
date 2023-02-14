@@ -1,0 +1,11 @@
+{% extends 'airport/base.html' %}
+{% block content %}
+  <h2>Are you sure you want to delete the following flight?</h2>
+  <p>Flight Number: {{ flight.flight_number }}</p>
+  <p>Origin: {{ flight.origin }}</p>
+  <p>Destination: {{ flight.destination }}</p>
+  <form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Confirm">
+  </form>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'airport/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+        <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class ="form-group">
+                <legend class = "bord-bottom mb-4">Edit Flights</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group"></div>
+                <button class="btn btn-outline-info" type="submit">Edit</button>
+        </form>
+    </div>
+{% endblock %}
