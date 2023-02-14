@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, Flight, Ticket
+from .models import Profile, Flight, Ticket, TicketPurchase
 from airport.models import Schedule
 
 class UserRegisterForm(UserCreationForm):
@@ -39,3 +39,14 @@ class TicketUpdateForm(forms.ModelForm):
         model = Ticket
         fields = ['flight_number', 'origin', 'destination', 'departure_date', 'departure_time',
                   'arrival_date', 'arrival_time']
+
+class TicketPurchaseForm(forms.ModelForm):
+    class Meta:
+        model = TicketPurchase
+        fields = ['profile', 'ticket']
+
+class SearchFlightForm(forms.ModelForm):
+    class Meta:
+        model = Schedule
+        fields = ['flight_number', 'origin', 'destination', 'departure_time', 'estimated_departure',
+                  'arrival_time', 'estimated_arrival', 'day', 'status']

@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FlightForm, EditFlightForm, TicketUpdateForm
@@ -77,3 +78,27 @@ def delete_flight(request, id):
         flight.delete()
         return redirect('home')
     return render(request, 'airport/deleteflight.html', {'flight': flight})
+
+@login_required
+def search_flight(request):
+    schedules =  Schedule.objects.all()
+    sort_by = request.GET.get('sort_by')
+    search_criteria = request.GET.get('search_criteria')
+    if search_criteria:
+        schedules = schedules.filter(Q(origin__icontains=search_criteria) |
+                                 Q(destination__icontains=search_criteria) |
+                                Q(flight_number__icontains=search_criteria) |
+                                 Q(departure_time__icontains=search_criteria) |
+                                 Q(departure_time__icontains=search_criteria) |
+                                 Q(estimated_departure__icontains=search_criteria) |
+                                 Q(arrival_time__icontains=search_criteria) |
+                                 Q(estimated_arrival__icontains=search_criteria) |
+                                 Q(day__icontains=search_criteria) |
+                                 Q(status__icontains=search_criteria) )
+    if sort_by:
+        schedules = schedules.order_by(sort_by)
+    return render(request, 'airport/searchflights.html', {'schedules': schedules})
+
+
+
+
