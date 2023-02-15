@@ -42,7 +42,7 @@
                 <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                 {% if user.is_staff %}
                     <a class="nav-item nav-link" href="{% url 'add-flights' %}">Add Flights</a>
-                    <a class="nav-item nav-link" href="#">Manage ticket database</a>
+                    <a class="nav-item nav-link" href="{% url 'manage-tickets' %}">Manage ticket database</a>
                 {% endif %}
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Log out</a>
             {% else %}

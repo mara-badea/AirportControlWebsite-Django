@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FlightForm, EditFlightForm, TicketUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FlightForm, EditFlightForm, TicketUpdateForm, TicketForm, EditTicketForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Ticket, Flight
@@ -60,7 +60,6 @@ def add_flight(request):
 def edit_flights(request, id):
     schedule = Schedule.objects.get(id=id)
     if request.method == 'POST':
-        # Get the flight instance based on the submitted data
         form = EditFlightForm(request.POST, instance=schedule)
         if form.is_valid():
             form.save()
@@ -98,6 +97,40 @@ def search_flight(request):
     if sort_by:
         schedules = schedules.order_by(sort_by)
     return render(request, 'airport/searchflights.html', {'schedules': schedules})
+
+@staff_member_required
+def add_tickets(request):
+    if request.method == 'POST':
+        form = TicketForm(request.POST)
+        if form.is_valid():
+            flight = form.save(commit=False)
+            flight.save()
+            return redirect('manage-tickets')
+    else:
+        form = TicketForm()
+        return render(request, 'airport/addtickets.html', {'form': form})
+
+@staff_member_required
+def edit_tickets(request, id):
+    ticket = Ticket.objects.get(id=id)
+    if request.method == 'POST':
+        form = EditTicketForm(request.POST, instance=ticket)
+        if form.is_valid():
+            form.save()
+            return redirect('manage-tickets')
+
+    else:
+        form = EditTicketForm(instance=ticket)
+        return render(request, 'airport/edittickets.html', {'form': form})
+    return render(request, 'airport/managetickets.html', {'form': form})
+
+@staff_member_required
+def delete_ticket(request, id):
+    ticket = Ticket.objects.get(id=id)
+    if request.method == 'POST':
+        ticket.delete()
+        return redirect('manage-tickets')
+    return render(request, 'airport/deleteticket.html', {'ticket': ticket})
 
 
 

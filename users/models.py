@@ -14,14 +14,14 @@ class Flight(models.Model):
     status = models.CharField(max_length=100)
 
 class Ticket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    flight_number = models.ForeignKey(Flight, on_delete=models.CASCADE)
+    flight_number = models.CharField(max_length=100)
     origin = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
     departure_date = models.DateField()
     departure_time = models.TimeField()
     arrival_date = models.DateField()
     arrival_time = models.TimeField()
+    price = models.CharField(max_length=100, blank=True, null=True)
 
 class Profile(models.Model):
 

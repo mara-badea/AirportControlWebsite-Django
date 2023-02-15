@@ -40,6 +40,18 @@ class TicketUpdateForm(forms.ModelForm):
         fields = ['flight_number', 'origin', 'destination', 'departure_date', 'departure_time',
                   'arrival_date', 'arrival_time']
 
+class TicketForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ['flight_number', 'origin', 'destination', 'departure_date', 'departure_time',
+                  'arrival_date', 'arrival_time', 'price']
+
+class EditTicketForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ['flight_number', 'origin', 'destination', 'departure_date', 'departure_time',
+                  'arrival_date', 'arrival_time', 'departure_date', 'price']
+
 class TicketPurchaseForm(forms.ModelForm):
     class Meta:
         model = TicketPurchase
