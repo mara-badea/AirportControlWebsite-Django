@@ -20,7 +20,7 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['tickets']
+        fields = []
 
 class FlightForm(forms.ModelForm):
     class Meta:
@@ -85,10 +85,15 @@ class TicketSearchForm(forms.Form):
         return tickets
 
 class TicketPurchaseForm(forms.ModelForm):
+    ticket = forms.ModelChoiceField(queryset=Ticket.objects.none())
+
     class Meta:
         model = TicketPurchase
-        fields = []
+        fields = ['ticket']
 
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['ticket'].queryset = Ticket.objects.filter(ticket_purchase__profile=user.profile)
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         self.ticket = kwargs.pop('ticket')

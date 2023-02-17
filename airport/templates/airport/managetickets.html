@@ -30,7 +30,6 @@
         <td>{{ class_schedule.arrival_time }}</td>
       <td>{{ class_schedule.departure_date}}</td>
         <td>{{ class_schedule.price}}</td>
-        <td><a href="#" class="btn btn-outline-info btn-sm">Buy ticket</a></td>
             {% if user.is_staff %}
                 <td>
                     <a href="{% url 'edit-tickets' class_schedule.id %}" class="btn btn-outline-info btn-sm">Edit</a>
