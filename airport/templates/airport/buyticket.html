@@ -1,0 +1,24 @@
+{% extends 'airport/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<form method="GET" action="{% url 'ticket-search-results' %}">
+  <div class="form-group">
+    <label for="origin">Origin</label>
+    <input type="text" class="form-control" id="origin" name="origin" required>
+  </div>
+  <div class="form-group">
+    <label for="destination">Destination</label>
+    <input type="text" class="form-control" id="destination" name="destination" required>
+  </div>
+  <div class="form-group">
+    <label for="departure_date">Departure Date</label>
+    <input type="date" class="form-control" id="departure_date" name="departure_date" required>
+  </div>
+  <div class="form-group">
+    <label for="return_date">Return Date</label>
+    <input type="date" class="form-control" id="return_date" name="return_date">
+  </div>
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+{% endblock %}

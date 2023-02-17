@@ -15,7 +15,7 @@ def schedule_view(request):
 def ticket_view(request):
 
     context = {
-        'ticket' : Ticket.objects.all().order_by('departure_date')
+        'ticket' : Ticket.objects.all().order_by('departure_date', 'departure_time')
     }
     return render(request, 'airport/managetickets.html.', context)
 

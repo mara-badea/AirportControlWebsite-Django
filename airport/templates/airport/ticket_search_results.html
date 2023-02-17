@@ -1,0 +1,27 @@
+{% extends 'airport/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <table>
+    <tr>
+      <th>Flight Number</th>
+      <th>Origin</th>
+      <th>Destination</th>
+      <th>Departure Time</th>
+      <th>Arrival Time</th>
+      <th>Day</th>
+      <th>Price</th>
+    </tr>
+    {% for ticket in tickets %}
+      <tr>
+        <td>{{ ticket.flight_number }}</td>
+        <td>{{ ticket.origin }}</td>
+        <td>{{ ticket.destination }}</td>
+        <td>{{ ticket.departure_time }}</td>
+        <td>{{ ticket.arrival_time }}</td>
+        <td>{{ ticket.day }}</td>
+        <td>{{ ticket.price }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

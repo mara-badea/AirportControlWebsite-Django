@@ -1,10 +1,10 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FlightForm, EditFlightForm, TicketUpdateForm, TicketForm, EditTicketForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FlightForm, EditFlightForm, TicketUpdateForm, TicketForm, EditTicketForm, TicketSearchForm, TicketPurchaseForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import Ticket, Flight
+from .models import Ticket, Flight, TicketPurchase
 from airport.models import Schedule
 
 def register(request):
@@ -90,7 +90,7 @@ def search_flight(request):
                                  Q(departure_time__icontains=search_criteria) |
                                  Q(departure_time__icontains=search_criteria) |
                                  Q(estimated_departure__icontains=search_criteria) |
-                                 Q(arrival_time__icontains=search_criteria) |
+                                  Q(arrival_time__icontains=search_criteria) |
                                  Q(estimated_arrival__icontains=search_criteria) |
                                  Q(day__icontains=search_criteria) |
                                  Q(status__icontains=search_criteria) )
@@ -131,6 +131,49 @@ def delete_ticket(request, id):
         ticket.delete()
         return redirect('manage-tickets')
     return render(request, 'airport/deleteticket.html', {'ticket': ticket})
+@login_required
+def ticket_search(request):
+    if request.method == 'POST':
+        form = TicketSearchForm(request.POST)
+        if form.is_valid():
+            origin = form.cleaned_data['origin']
+            destination = form.cleaned_data['destination']
+            departure_date = form.cleaned_data['departure_date']
+            return_date = form.cleaned_data.get('return_date')
+
+            tickets = Ticket.objects.filter(
+                origin=origin,
+                destination=destination,
+                departure_date=departure_date,
+            )
+            if return_date:
+                tickets = tickets.filter(arrival_date=return_date)
+
+            return render(request, 'airport/ticket_search_results.html', {'tickets': tickets})
+    else:
+        form = TicketSearchForm()
+
+    return render(request, 'airport/buyticket.html', {'form': form})
+
+
+@login_required
+def purchase_ticket(request, ticket_id):
+    ticket = Ticket.objects.get(id=ticket_id)
+
+    if request.method == 'POST':
+        form = TicketPurchaseForm(request.POST)
+        if form.is_valid():
+            profile = request.user.profile
+            purchase = TicketPurchase.objects.create(
+                profile=profile,
+                ticket=ticket,
+            )
+            return render(request, 'ticket_purchase_success.html', {'purchase': purchase})
+    else:
+        form = TicketPurchaseForm()
+
+    return render(request, 'ticket_purchase.html', {'form': form, 'ticket': ticket})
+
 
 
 
