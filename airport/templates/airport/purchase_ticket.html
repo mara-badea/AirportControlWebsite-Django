@@ -1,0 +1,12 @@
+{% extends 'airport/base.html' %}
+{% block content %}
+  <h2>Are you sure you want to purchase the following ticket?</h2>
+  <p>Flight Number: {{ ticket.flight_number }}</p>
+  <p>Origin: {{ ticket.origin }}</p>
+  <p>Destination: {{ ticket.destination }}</p>
+    <p>Price: {{ ticket.price }}</p>
+  <form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Confirm">
+  </form>
+{% endblock %}

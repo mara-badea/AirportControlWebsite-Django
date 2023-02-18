@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Profile, Flight, Ticket, TicketPurchase
 from airport.models import Schedule
 
+
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
 
@@ -53,6 +54,10 @@ class EditTicketForm(forms.ModelForm):
                   'arrival_date', 'arrival_time', 'departure_date', 'price']
 
 class TicketPurchaseForm(forms.ModelForm):
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['profile'].queryset = Profile.objects.filter(user=user)
+
     class Meta:
         model = TicketPurchase
         fields = ['profile', 'ticket']
@@ -84,27 +89,3 @@ class TicketSearchForm(forms.Form):
 
         return tickets
 
-class TicketPurchaseForm(forms.ModelForm):
-    ticket = forms.ModelChoiceField(queryset=Ticket.objects.none())
-
-    class Meta:
-        model = TicketPurchase
-        fields = ['ticket']
-
-    def __init__(self, user, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['ticket'].queryset = Ticket.objects.filter(ticket_purchase__profile=user.profile)
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
-        self.ticket = kwargs.pop('ticket')
-        super().__init__(*args, **kwargs)
-
-    def save(self, commit=True):
-        ticket_purchase = super().save(commit=False)
-        ticket_purchase.profile = self.user.profile
-        ticket_purchase.ticket = self.ticket
-
-        if commit:
-            ticket_purchase.save()
-
-        return ticket_purchase

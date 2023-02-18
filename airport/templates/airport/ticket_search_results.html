@@ -22,7 +22,7 @@
             <td>{{ flight.departure_time }}</td>
             <td>{{ flight.arrival_time }}</td>
             <td>{{ flight.price }}</td>
-        <td><a href="#" class="btn btn-outline-info btn-sm">Buy ticket</a></td>
+        <td><a href="{% url 'ticket-purchase' flight.id %}" class="btn btn-outline-info btn-sm">Buy ticket</a></td>
         </tr>
         {% empty %}
         <tr>

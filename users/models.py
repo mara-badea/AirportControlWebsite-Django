@@ -35,8 +35,3 @@ class TicketPurchase(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     purchase_date = models.DateField(auto_now_add=True)
-
-
-
-
-

@@ -17,7 +17,7 @@
         </thead>
         <tbody>
         <tr>
-        {% for class_ticket in Ticket %}
+        {% for class_ticket in request.user.profile.tickets.all  %}
         <tr>
             <td>{{ class_ticket.flight_number }}</td>
             <td>{{ class_ticket.origin }}</td>

@@ -4,7 +4,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FlightForm, EditFlightForm, TicketUpdateForm, TicketForm, EditTicketForm, TicketSearchForm, TicketPurchaseForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import Ticket, Flight, TicketPurchase
+from .models import Ticket, Flight, TicketPurchase, Profile
 from airport.models import Schedule
 
 def register(request):
@@ -176,23 +176,19 @@ def ticket_search_results(request):
         }
 
         return render(request, 'airport/ticket_search_results.html', context)
+
 @login_required
-def purchase_ticket(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
+def ticket_purchase(request, id):
+    ticket = Ticket.objects.get(id=id)
+    profile = Profile.objects.get(user=request.user)
+    # create a new ticket purchase object and set its user and ticket fields
+    ticket_purchase = TicketPurchase(profile=profile, ticket=ticket)
+    ticket_purchase.save()
+    context = {'ticket': ticket}
 
-    if request.method == 'POST':
-        form = TicketPurchaseForm(request.POST)
-        if form.is_valid():
-            profile = request.user.profile
-            purchase = TicketPurchase.objects.create(
-                profile=profile,
-                ticket=ticket,
-            )
-            return render(request, 'ticket_purchase_success.html', {'purchase': purchase})
-    else:
-        form = TicketPurchaseForm()
+    return redirect('profile')
 
-    return render(request, 'ticket_purchase.html', {'form': form, 'ticket': ticket})
+
 
 
 
